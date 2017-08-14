@@ -1,0 +1,27 @@
+# Managed by Ansible template for /etc/ssmtp/ssmtp.conf
+
+# The user that gets all the mails (UID < 1000, usually the admin)
+root={{ service_alias }}
+
+# The mail server (where the mail is sent to), both port 465 or 587 should be acceptable
+# See also https://support.google.com/mail/answer/78799
+mailhub={{ mail_hub }}
+
+# The address where the mail appears to come from for user authentication.
+rewriteDomain={{ rewrite_domain }}
+
+# The full hostname.  Must be correctly formed, fully qualified domain name or GMail/or any propperly configured smtp server will reject connection.
+hostname={{ inventory_hostname }}
+
+# Use SSL/TLS before starting negotiation
+UseTLS=Yes
+UseSTARTTLS=Yes
+
+# Username/Password
+AuthUser={{ service_email }}
+AuthPass={{ service_password }}
+AuthMethod=PLAIN
+
+# Email 'From header's can override the default domain?
+FromLineOverride=yes
+

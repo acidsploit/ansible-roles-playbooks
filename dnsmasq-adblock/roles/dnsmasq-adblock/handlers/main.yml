@@ -1,0 +1,39 @@
+---
+
+- name: enable dnsmasq.service
+  systemd: 
+    name: dnsmasq.service
+    daemon_reload: no
+    enabled: yes
+    masked: no
+
+- name: enable cronie.service
+  systemd: 
+    name: cronie.service
+    daemon_reload: no
+    enabled: yes
+    masked: no
+    
+- name: start dnsmasq.service
+  systemd: 
+    name: dnsmasq.service
+    daemon_reload: no
+    state: started
+    
+- name: restart dnsmasq.service
+  systemd: 
+    name: dnsmasq.service
+    daemon_reload: no
+    state: restarted
+
+- name: start cronie.service
+  systemd: 
+    name: cronie.service
+    daemon_reload: no
+    state: started
+    
+- name: restart cronie.service
+  systemd: 
+    name: cronie.service
+    daemon_reload: no
+    state: restarted

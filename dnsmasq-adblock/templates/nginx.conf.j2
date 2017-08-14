@@ -1,0 +1,37 @@
+# Managed by Ansible
+
+user {{ nxuser }} {{ nxgroup }};
+worker_processes {{ worker_processes }};
+
+events {
+    worker_connections {{ worker_connections }};
+}
+
+http {
+    include mime.types;
+    default_type application/octet-stream;
+    #log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+    #                  '$status $body_bytes_sent "$http_referer" '
+    #                  '"$http_user_agent" "$http_x_forwarded_for"';
+    #access_log  logs/access.log  main;
+    sendfile on;
+    #tcp_nopush     on;
+    #keepalive_timeout  0;
+    keepalive_timeout 65;
+    server_names_hash_bucket_size 64;    
+    gzip  on;
+
+    server{
+        listen localhost:80;
+        server_name localhost;
+        location /nginx_status {
+            stub_status on;    # activate stub_status module
+            access_log off;    
+            allow 127.0.0.1;   # restrict access to local only
+            allow {{ ansible_ens3.ipv4.address }};
+            deny all;
+        }   
+    }
+
+    include sites-enabled/*;
+}

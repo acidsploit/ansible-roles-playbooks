@@ -1,0 +1,43 @@
+- name: "install dnsmasq wget cronie ufw"
+  package: name=dnsmasq,cronie,wget,ufw
+          state=present
+  notify:
+    - enable dnsmasq.service
+    - enable cronie.service
+
+- name: "setup firewall"
+  ufw:
+    rule: allow
+    port: "{{ item }}"
+    state: enabled
+  with_items:
+    - 22
+    - 53
+    
+- name: "install dnsmasq configs"
+  copy:
+    src: "files/{{ ansible_host }}{{ item }}"
+    dest: "{{ item }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - /etc/dnsmasq.conf
+    - /etc/dnsmasq.hosts.conf
+    - /etc/dnsmasq.adblock.conf
+  notify:
+    - restart dnsmasq.service
+    
+- name: "install cronjob"
+  copy:
+    src: "files/{{ ansible_host }}{{ item }}"
+    dest: "{{ item }}"
+    owner: root
+    group: root
+    mode: 0755
+  with_items:
+    - /etc/cron.daily/dnsmasq.adblock.sh
+  notify:
+    - restart cronie.service
+    
+  
