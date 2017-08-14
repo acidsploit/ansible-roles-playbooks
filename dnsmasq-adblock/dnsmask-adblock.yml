@@ -1,7 +1,0 @@
----
-- hosts: dns
-
-  become: true
-  roles:
-  - dns
-
